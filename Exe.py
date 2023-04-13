@@ -99,7 +99,8 @@ async def loop():
                         await member.send('試合開始まで{}秒間スリープします'.format(sleep_time))
                     except:
                         pass
-            print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, sleep_time))
+            print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'
+                  .format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
             status = parse.find('p', class_='bb-score__link').text
             loop_flag = 0
@@ -202,7 +203,8 @@ async def loop():
                         await member.send('試合開始まで{}秒間スリープします'.format(sleep_time))
                     except:
                         pass
-            print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, sleep_time))
+            print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'
+                  .format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
             status = parse.find('p', class_='bb-score__link').text
             loop_flag = 0
