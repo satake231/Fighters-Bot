@@ -111,7 +111,6 @@ async def loop():
         while(loop_flag == 0):
             if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=0)
-
                 if win_lose == 0:
                     score_of_home = int(parse.find('span', class_='bb-score__score bb-score__score--left').text)
                     score_of_away = int(parse.find('span', class_='bb-score__score bb-score__score--right').text)
@@ -172,10 +171,9 @@ async def loop():
                     loop_flag = 1
             elif '回' in status:
                 await asyncio.sleep(300)
-                for member in client.get_all_members():
-                    if not member.bot:
+                for channel in client.get_all_channels():
                         try:
-                            await member.send('結果を待つために5分休止します')
+                            await channel.send('結果を待つために5分休止します')
                         except:
                             pass
             else:
@@ -277,12 +275,11 @@ async def loop():
                                 pass
             elif '回' in status:
                 await asyncio.sleep(300)
-                for member in client.get_all_members():
-                    if not member.bot:
-                        try:
-                            await member.send('結果を待つために5分休止します')
-                        except:
-                            pass
+                for channel in client.get_all_channels():
+                    try:
+                        await channel.send('結果を待つために5分休止します')
+                    except:
+                        pass
             else:
                 opponent_name = GetOpponentName(home_visiter=1, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
@@ -315,7 +312,7 @@ async def loop():
     for member in client.get_all_members():
         if not member.bot:
             try:
-                await member.send('{}年{}月{}日{}時{}分から{}秒間スリープします'.format(year, month, day, oclock, minmin, wait_seconds))
+                await member.send('次回のBot起動まで約{}時間スリープします'.format(int(wait_seconds)))
             except:
                 pass
     print('Start Long Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, wait_seconds))
