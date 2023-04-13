@@ -8,9 +8,9 @@ import discord
 from discord.ext import tasks
 
 team_num = '8'
-team_name = 'ファイターズ'
-TOKEN = ''
 
+TOKEN = ''
+team_name = '日本ハム'
 def WinLose(team_num, soup, home_visiter):
     if home_visiter == 0:
         parse = soup.find('p', class_='bb-score__homeLogo bb-score__homeLogo--npbTeam{}'.format(team_num))\
@@ -95,17 +95,15 @@ async def loop():
             sleep_time = (process_start - now).total_seconds()
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
+            status = parse.find('p', class_='bb-score__link').text
+            loop_flag = 0
         except:
-            pass
-
-        parse = soup.find('p', class_='bb-score__homeLogo bb-score__homeLogo--npbTeam{}'
-                          .format(team_num)).find_parent('div').find_parent('a')
-        status = parse.find('p', class_='bb-score__link').text
-
-        loop_flag = 0
+            loop_flag = 1
+            status = '試合無し'
+            parse = ''
 
         while(loop_flag == 0):
-            if status == '試合終了' or '回' in status:
+            if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=0)
 
                 if win_lose == 0:
@@ -119,8 +117,8 @@ async def loop():
                     for member in client.get_all_members():
                         if not member.bot:
                             try:
-                                await member.send('--------【速報】--------\n日本ハムが{}に{}で勝利しました！！'
-                                                  .format(opponent_name, score))
+                                await member.send('--------【速報】--------\n{}が{}に{}で勝利しました！！'
+                                                  .format(team_name, opponent_name, score))
                             except:
                                 pass
                     loop_flag = 1
@@ -136,8 +134,8 @@ async def loop():
                     for member in client.get_all_members():
                         if not member.bot:
                             try:
-                                await member.send('--------【速報】--------\n日本ハムが{}に{}で敗北しました！！'
-                                                  .format(opponent_name, score))
+                                await member.send('--------【速報】--------\n{}が{}に{}で敗北しました！！'
+                                                  .format(team_name, opponent_name, score))
                             except:
                                 pass
                     loop_flag = 1
@@ -153,20 +151,21 @@ async def loop():
                     for member in client.get_all_members():
                         if not member.bot:
                             try:
-                                await member.send('--------【速報】--------\n日本ハムが{}に{}で引き分けました！！'
-                                                  .format(opponent_name, score))
+                                await member.send('--------【速報】--------\n{}が{}に{}で引き分けました！！'
+                                                  .format(team_name, opponent_name, score))
                             except:
                                 pass
                     loop_flag = 1
                 else:
                     loop_flag = 1
-            elif status == '試合中':
+            elif '回' in status:
                 await asyncio.sleep(300)
             else:
+                opponent_name = GetOpponentName(home_visiter=0, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
                     if not member.bot:
                         try:
-                            await member.send('本日の試合は中止になりました。')
+                            await member.send('本日の{}と{}の試合は中止になりました'.format(team_name, opponent_name))
                         except:
                             pass
                 loop_flag = 1
@@ -183,21 +182,16 @@ async def loop():
             sleep_time = (process_start - now).total_seconds()
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
+            status = parse.find('p', class_='bb-score__link').text
+            loop_flag = 0
         except:
-            pass
-
-        parse = soup.find('p', class_='bb-score__awayLogo bb-score__awayLogo--npbTeam{}'
-                          .format(team_num)).find_parent('div').find_parent('a')
-
-        status = parse.find('p', class_='bb-score__link').text
-        loop_flag = 0
+            status = '試合無し'
+            loop_flag = 1
+            parse = ''
 
         while(loop_flag == 0):
-
-            if status == '試合終了' or '回' in status:
-
+            if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=1)
-
                 if win_lose == 0: #勝った時
                     score_of_home = int(parse.find('span', class_='bb-score__score bb-score__score--left').text)
                     score_of_away = int(parse.find('span', class_='bb-score__score bb-score__score--right').text)
@@ -209,8 +203,8 @@ async def loop():
                     for member in client.get_all_members():
                         if not member.bot:
                             try:
-                                await member.send('--------【速報】--------\n日本ハムが{}に{}で勝利しました！！'
-                                                  .format(opponent_name, score))
+                                await member.send('--------【速報】--------\n{}が{}に{}で勝利しました！！'
+                                                  .format(team_name, opponent_name, score))
                             except:
                                 pass
 
@@ -227,8 +221,8 @@ async def loop():
                     for member in client.get_all_members():
                         if not member.bot:
                             try:
-                                await member.send('--------【速報】--------\n日本ハムが{}に{}で敗北しました！！'
-                                                  .format(opponent_name, score))
+                                await member.send('--------【速報】--------\n{}が{}に{}で敗北しました！！'
+                                                  .format(team_name, opponent_name, score))
                             except:
                                 pass
                     loop_flag = 1
@@ -244,25 +238,31 @@ async def loop():
                     for member in client.get_all_members():
                         if not member.bot:
                             try:
-                                await member.send('--------【速報】--------\n日本ハムが{}に{}で引き分けました！！'
-                                                  .format(opponent_name, score))
+                                await member.send('--------【速報】--------\n{}が{}に{}で引き分けました！！'
+                                                  .format(team_name, opponent_name, score))
                             except:
                                 pass
                     loop_flag = 1
                 else:
                     loop_flag = 1
-            elif status == '試合中':
+            elif '回' in status:
                 await asyncio.sleep(300)
             else:
+                opponent_name = GetOpponentName(home_visiter=1, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
                     if not member.bot:
                         try:
-                            await member.send('本日の試合は中止になりました。')
+                            await member.send('本日の{}と{}の試合は中止になりました'.format(team_name, opponent_name))
                         except:
                             pass
                 loop_flag = 1
     else:
-        print('No game exists today')
+        for member in client.get_all_members():
+            if not member.bot:
+                try:
+                    await member.send('本日は試合がありません')
+                except:
+                    pass
     # await asyncio.sleep(30) #実験用 実装時は消す
 
     now = datetime.datetime.now()
@@ -276,6 +276,12 @@ async def loop():
     day = now.strftime('%d')
     oclock = now.strftime('%H')
     minmin = now.strftime('%M')
+    for member in client.get_all_members():
+        if not member.bot:
+            try:
+                await member.send('{}年{}月{}日{}時{}分まで{}秒間スリープします'.format(year, month, day, oclock, minmin, wait_seconds))
+            except:
+                pass
     print('Start Long Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, wait_seconds))
     await asyncio.sleep(wait_seconds)
 
@@ -284,6 +290,12 @@ async def loop():
 @client.event
 async def on_ready():
     print("logged in as " + client.user.name)
+    for member in client.get_all_members():
+        if not member.bot:
+            try:
+                await member.send('-------------{}速報Bot起動-------------'.format(team_name))
+            except:
+                pass
     loop.start()
 
 # Botの起動とDiscordサーバーへの接続
