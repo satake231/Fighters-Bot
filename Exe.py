@@ -96,7 +96,7 @@ async def loop():
             for member in client.get_all_members():
                 if not member.bot:
                     try:
-                        await member.send('試合開始まで{}秒間スリープします'.format(sleep_time))
+                        await member.send('試合開始まで{}時間スリープします'.format(int(sleep_time/60)))
                     except:
                         pass
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'
@@ -314,7 +314,7 @@ async def loop():
     for member in client.get_all_members():
         if not member.bot:
             try:
-                await member.send('次回のBot起動まで約{}時間スリープします'.format(int(wait_seconds)))
+                await member.send('次回のBot起動まで約{}時間スリープします'.format(int(wait_seconds/360)))
             except:
                 pass
     print('Start Long Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, wait_seconds))
