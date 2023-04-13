@@ -93,6 +93,12 @@ async def loop():
             game_start = now.replace(hour=int(start_hour), minute=int(start_minutes), second=0, microsecond=0)
             process_start = game_start + datetime.timedelta(hours=2)
             sleep_time = (process_start - now).total_seconds()
+            for member in client.get_all_members():
+                if not member.bot:
+                    try:
+                        await member.send('試合開始まで{}秒間スリープします'.format(sleep_time))
+                    except:
+                        pass
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
             status = parse.find('p', class_='bb-score__link').text
@@ -157,9 +163,21 @@ async def loop():
                                 pass
                     loop_flag = 1
                 else:
+                    for member in client.get_all_members():
+                        if not member.bot:
+                            try:
+                                await member.send('試合結果の取得にエラーが発生した可能性があります')
+                            except:
+                                pass
                     loop_flag = 1
             elif '回' in status:
                 await asyncio.sleep(300)
+                for member in client.get_all_members():
+                    if not member.bot:
+                        try:
+                            await member.send('結果を待つために5分休止します')
+                        except:
+                            pass
             else:
                 opponent_name = GetOpponentName(home_visiter=0, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
@@ -180,6 +198,12 @@ async def loop():
             game_start = now.replace(hour=int(start_hour), minute=int(start_minutes), second=0, microsecond=0)
             process_start = game_start + datetime.timedelta(hours=2)
             sleep_time = (process_start - now).total_seconds()
+            for member in client.get_all_members():
+                if not member.bot:
+                    try:
+                        await member.send('試合開始まで{}秒間スリープします'.format(sleep_time))
+                    except:
+                        pass
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
             status = parse.find('p', class_='bb-score__link').text
@@ -245,8 +269,20 @@ async def loop():
                     loop_flag = 1
                 else:
                     loop_flag = 1
+                    for member in client.get_all_members():
+                        if not member.bot:
+                            try:
+                                await member.send('試合結果の取得にエラーが発生した可能性があります')
+                            except:
+                                pass
             elif '回' in status:
                 await asyncio.sleep(300)
+                for member in client.get_all_members():
+                    if not member.bot:
+                        try:
+                            await member.send('結果を待つために5分休止します')
+                        except:
+                            pass
             else:
                 opponent_name = GetOpponentName(home_visiter=1, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
@@ -279,7 +315,7 @@ async def loop():
     for member in client.get_all_members():
         if not member.bot:
             try:
-                await member.send('{}年{}月{}日{}時{}分まで{}秒間スリープします'.format(year, month, day, oclock, minmin, wait_seconds))
+                await member.send('{}年{}月{}日{}時{}分から{}秒間スリープします'.format(year, month, day, oclock, minmin, wait_seconds))
             except:
                 pass
     print('Start Long Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, wait_seconds))
