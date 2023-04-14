@@ -170,14 +170,7 @@ async def loop():
                             except:
                                 pass
                     loop_flag = 1
-            elif '回' in status:
-                await asyncio.sleep(300)
-                for channel in client.get_all_channels():
-                        try:
-                            await channel.send('結果を待つために5分休止します')
-                        except:
-                            pass
-            else:
+            elif status == '試合中止':
                 opponent_name = GetOpponentName(home_visiter=0, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
                     if not member.bot:
@@ -186,6 +179,14 @@ async def loop():
                         except:
                             pass
                 loop_flag = 1
+            else:
+                await asyncio.sleep(300)
+                for channel in client.get_all_channels():
+                    try:
+                        await channel.send('結果を待つために5分休止します')
+                    except:
+                        pass
+
 
     elif len(away) == 1:
         try:
@@ -275,14 +276,7 @@ async def loop():
                                 await member.send('試合結果の取得にエラーが発生した可能性があります')
                             except:
                                 pass
-            elif '回' in status:
-                await asyncio.sleep(300)
-                for channel in client.get_all_channels():
-                    try:
-                        await channel.send('結果を待つために5分休止します')
-                    except:
-                        pass
-            else:
+            elif status == '試合中止':
                 opponent_name = GetOpponentName(home_visiter=1, team_num=team_num, soup=soup)
                 for member in client.get_all_members():
                     if not member.bot:
@@ -291,6 +285,13 @@ async def loop():
                         except:
                             pass
                 loop_flag = 1
+            else:
+                await asyncio.sleep(300)
+                for channel in client.get_all_channels():
+                    try:
+                        await channel.send('結果を待つために5分休止します')
+                    except:
+                        pass
     else:
         for member in client.get_all_members():
             if not member.bot:
