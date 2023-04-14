@@ -102,14 +102,13 @@ async def loop():
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'
                   .format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
-            status = parse.find('p', class_='bb-score__link').text
             loop_flag = 0
         except:
             loop_flag = 1
-            status = '試合無し'
             parse = ''
 
         while(loop_flag == 0):
+            status = parse.find('p', class_='bb-score__link').text
             if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=0)
                 if win_lose == 0:
@@ -207,14 +206,13 @@ async def loop():
             print('Start Short Sleep at {}:{}:{}:{}:{} for {}seconds'
                   .format(year, month, day, oclock, minmin, sleep_time))
             await asyncio.sleep(sleep_time)
-            status = parse.find('p', class_='bb-score__link').text
             loop_flag = 0
         except:
-            status = '試合無し'
             loop_flag = 1
             parse = ''
 
         while(loop_flag == 0):
+            status = parse.find('p', class_='bb-score__link').text
             if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=1)
                 if win_lose == 0: #勝った時
