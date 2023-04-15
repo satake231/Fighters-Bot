@@ -109,6 +109,13 @@ async def loop():
 
         while(loop_flag == 0):
             status = parse.find('p', class_='bb-score__link').text
+            for member in client.get_all_members():
+                if not member.bot:
+                    try:
+                        await member.send('今回の試合はホームゲームです．試合状況は{}です'
+                                          .format(status))
+                    except:
+                        pass
             if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=0)
                 if win_lose == 0:
@@ -213,6 +220,13 @@ async def loop():
 
         while(loop_flag == 0):
             status = parse.find('p', class_='bb-score__link').text
+            for member in client.get_all_members():
+                if not member.bot:
+                    try:
+                        await member.send('今回の試合はアウェーゲームです．試合状況は{}です'
+                                          .format(status))
+                    except:
+                        pass
             if status == '試合終了':
                 win_lose = WinLose(team_num=team_num, soup=soup, home_visiter=1)
                 if win_lose == 0: #勝った時
