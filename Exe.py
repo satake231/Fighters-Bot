@@ -327,7 +327,7 @@ async def loop():
     for member in client.get_all_members():
         if not member.bot:
             try:
-                await member.send('次回のBot起動まで約{}時間スリープします'.format(int(wait_seconds/360)))
+                await member.send('次回のBot起動まで約{}時間スリープします'.format(int(wait_seconds/3600)))
             except:
                 pass
     print('Start Long Sleep at {}:{}:{}:{}:{} for {}seconds'.format(year, month, day, oclock, minmin, wait_seconds))
